@@ -2,127 +2,82 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
+  <title>প্রেডিকশন বেটিং</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ডিপোজিট ফর্ম</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       background: #f4f4f4;
       padding: 20px;
     }
-    .form-container {
-      max-width: 400px;
-      margin: auto;
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    .question {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
-    h2 {
-      text-align: center;
-      color: #333;
+    .question h3 {
+      margin-top: 0;
     }
-    label {
-      display: block;
+    .options button {
+      margin-right: 10px;
       margin-top: 10px;
-      font-weight: bold;
-    }
-    select, input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-    button {
-      width: 100%;
-      background: #28a745;
-      color: white;
-      padding: 12px;
-      font-size: 16px;
+      padding: 8px 15px;
       border: none;
-      border-radius: 8px;
+      border-radius: 5px;
+      background-color: #0088cc;
+      color: white;
       cursor: pointer;
     }
-    button:hover {
-      background: #218838;
-    }
-    .payment-number {
-      background: #f0f0f0;
-      padding: 10px;
-      margin-top: -10px;
-      margin-bottom: 15px;
-      border-radius: 6px;
-      font-weight: bold;
-      color: #444;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .copy-btn {
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 6px 12px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .copy-btn:hover {
-      background: #0056b3;
+    .options button:hover {
+      background-color: #006b99;
     }
   </style>
 </head>
 <body>
-  <div class="form-container">
-    <h2>ডিপোজিট করুন</h2>
-
-    <label for="method">পেমেন্ট মেথড:</label>
-    <select id="method" name="method" onchange="showNumber()">
-      <option value="">-- নির্বাচন করুন --</option>
-      <option value="বিকাশ">বিকাশ</option>
-      <option value="নগদ">নগদ</option>
-    </select>
-
-    <div id="paymentNumber" class="payment-number" style="display: none;">
-      <span id="paymentText"></span>
-      <button class="copy-btn" onclick="copyNumber()">কপি করুন</button>
-    </div>
-
-    <label for="number">আপনার মোবাইল নাম্বার:</label>
-    <input type="text" id="number" name="number" placeholder="01XXXXXXXXX" required>
-
-    <label for="trxid">TrxID (লেনদেন নম্বর):</label>
-    <input type="text" id="trxid" name="trxid" placeholder="TrxID লিখুন" required>
-
-    <label for="amount">টাকার পরিমাণ:</label>
-    <input type="number" id="amount" name="amount" placeholder="যত টাকা পাঠিয়েছেন" required>
-
-    <button onclick="submitDeposit()">সাবমিট করুন</button>
-  </div>
+  <h2>প্রেডিকশন বেটিং অ্যাপ</h2>
+  <div id="questions-container"></div>
 
   <script>
-    const BOT_TOKEN = '8141110802:AAE1S38ZRzKrTHNZDNhCISdXOMkQCoTzNSo';
-    const CHAT_ID = '6593402184';
-
-    const paymentNumbers = {
-      "বিকাশ": "017XXXXXXXX",
-      "নগদ": "018XXXXXXXX"
-    };
-
-    function showNumber() {
-      const method = document.getElementById('method').value;
-      const display = document.getElementById('paymentNumber');
-      const textSpan = document.getElementById('paymentText');
-
-      if (paymentNumbers[method]) {
-        textSpan.innerText = `${method} নাম্বার: ${paymentNumbers[method]}`;
-        display.style.display = 'flex';
-      } else {
-        display.style.display = 'none';
+    const questions = [
+      {
+        id: 1,
+        text: "আগামীকাল কি বৃষ্টি হবে?",
+        options: ["হ্যাঁ", "না"]
+      },
+      {
+        id: 2,
+        text: "বাংলাদেশ কি ম্যাচ জিতবে?",
+        options: ["জিতবে", "হারবে"]
       }
+    ];
+
+    function renderQuestions() {
+      const container = document.getElementById("questions-container");
+      container.innerHTML = "";
+      questions.forEach(q => {
+        const div = document.createElement("div");
+        div.className = "question";
+        div.innerHTML = `<h3>${q.text}</h3>`;
+        const optionsDiv = document.createElement("div");
+        optionsDiv.className = "options";
+        q.options.forEach(opt => {
+          const btn = document.createElement("button");
+          btn.innerText = opt;
+          btn.onclick = () => handleVote(q.id, opt);
+          optionsDiv.appendChild(btn);
+        });
+        div.appendChild(optionsDiv);
+        container.appendChild(div);
+      });
     }
 
-    function copyNumber() {
-      const method = document.getElemen
+    function handleVote(questionId, selectedOption) {
+      alert(`আপনি "${selectedOption}" সিলেক্ট করেছেন (প্রশ্ন ID: ${questionId})`);
+    }
+
+    renderQuestions();
+  </script>
+</body>
+</html>
